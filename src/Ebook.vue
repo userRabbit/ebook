@@ -28,7 +28,8 @@
       @onProgressChange="onProgressChange"
       @jumpTo="jumpTo"
       :navigation="navigation"
-      ref="menuBar"></menu-bar>
+      ref="menuBar"
+    ></menu-bar>
   </div>
 </template>
 <script>
@@ -63,47 +64,47 @@ export default {
       // 主题样式列表
       themeList: [
         {
-          name: 'default',
+          name: "default",
           style: {
             body: {
-              'color': '#000',
-              'background': '#fff'
-            }
-          }
+              color: "#000",
+              background: "#fff",
+            },
+          },
         },
         {
-          name: 'eye',
+          name: "eye",
           style: {
             body: {
-              'color': '#000',
-              'background': '#ceeaba'
-            }
-          }
+              color: "#000",
+              background: "#ceeaba",
+            },
+          },
         },
         {
-          name: 'night',
+          name: "night",
           style: {
             body: {
-              'color': '#fff',
-              'background': '#000'
-            }
-          }
+              color: "#fff",
+              background: "#000",
+            },
+          },
         },
         {
-          name: 'gold',
+          name: "gold",
           style: {
             body: {
-              'color': '#000',
-              'background': 'rgb(241,236,226)'
-            }
-          }
-        }
+              color: "#000",
+              background: "rgb(241,236,226)",
+            },
+          },
+        },
       ],
       // 默认主题为themeList[0]
       defaultTheme: 0,
       // bookAvailable表示图书是否处于可用状态 默认为false
       bookAvailable: false,
-      navigation: null
+      navigation: null,
     };
   },
   components: {
@@ -112,12 +113,12 @@ export default {
   },
   methods: {
     // 目录跳转制定页面方法
-    jumpTo(href){
+    jumpTo(href) {
       this.rendition.display(href);
-      this.hideTitleAndMenu()
+      this.hideTitleAndMenu();
     },
     // 隐藏标题栏和菜单栏
-    hideTitleAndMenu(){
+    hideTitleAndMenu() {
       // 隐藏标题栏和菜单栏
       this.ifTitleAndMenuShow = false;
       // 隐藏菜单栏弹出的设置栏
@@ -158,23 +159,24 @@ export default {
         this.$refs.menuBar.hideSetting();
       }
     },
-    // 主题设置 
-    registerTheme(){
-      this.themeList.forEach(theme => {
-        this.themes.register(theme.name,theme.style)
-      })
+    // 主题设置
+    registerTheme() {
+      this.themeList.forEach((theme) => {
+        this.themes.register(theme.name, theme.style);
+      });
     },
     // 主题切换
-    setTheme(index){
-      this.themes.select(this.themeList[index].name)
+    setTheme(index) {
+      this.themes.select(this.themeList[index].name);
       this.defaultTheme = index;
     },
     // progress为进度条的数值 (0~100)
-    onProgressChange(progress){
-      const percentage = progress / 100
+    onProgressChange(progress) {
+      const percentage = progress / 100;
       // 获取一个真实的页码 比如当前的第几页
-      const location = percentage > 0 ? this.locations.cfiFromPercentage(percentage) : 0;
-      this.rendition.display(location)
+      const location =
+        percentage > 0 ? this.locations.cfiFromPercentage(percentage) : 0;
+      this.rendition.display(location);
     },
 
     // 电子书的解析和渲染
@@ -200,21 +202,23 @@ export default {
       // this.themes.register(name,style)
       // this.themes.select(name)
       this.registerTheme();
-      this.themes.select('night');
-      this.setTheme(this.defaultTheme)
+      this.themes.select("night");
+      this.setTheme(this.defaultTheme);
       // 获取location对象
       // 默认location对象是不会生成的 消耗性能
       // 通过epubjs的钩子函数来实现
       // this.book.ready钩子函数 表示等book解析完成之后就会进行回调的方法
       // 会返回一个promise对象
-      this.book.ready.then(() => {
-        this.navigation = this.book.navigation
-        return this.book.locations.generate();
-      }).then(result => {
-        console.log('yep');
-        this.locations = this.book.locations;
-        this.bookAvailable = true;
-      })
+      this.book.ready
+        .then(() => {
+          this.navigation = this.book.navigation;
+          return this.book.locations.generate();
+        })
+        .then((result) => {
+          console.log("yep");
+          this.locations = this.book.locations;
+          this.bookAvailable = true;
+        });
     },
   },
   mounted() {
